@@ -1,18 +1,21 @@
-package com.board.first.jwt;
+package com.board.first.security;
 
-import ch.qos.logback.core.util.StringUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
+/**
+ * Spring Request 앞단에 붙일 Custom Filter
+ *  'JwtFilter'는 요청이 서버로 들어오기 전에 실행되어 토큰의 유효성을 검사하고 인증된 사용자인지 확인하는 역할을 합니다.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -28,10 +31,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 2. validationToken 으로 토큰 유효성 검사
         // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
-        if (StringUtils.hasText(jwt) && tokenProvider.getAuthentication(jwt)) {
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
+        //현재 필터 작업이 끝나, 다음 필터에게 요청을 넘겨 주는 역할 한다.
         filterChain.doFilter(request, response);
     }
 

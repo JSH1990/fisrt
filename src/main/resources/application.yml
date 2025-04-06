@@ -10,12 +10,34 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create  # 테이블 자동 생성/업데이트
-    show-sql: true  # SQL 로그 출력
+    show-sql: true       # SQL 로그 출력
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
         format_sql: true  # SQL 포매팅
-logging:
-  level:
-    org.hibernate.SQL: DEBUG  # SQL 로그 레벨 설정
-    org.hibernate.type.descriptor.sql: TRACE
+
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG                # SQL 로그 레벨 설정
+      org.hibernate.type.descriptor.sql: TRACE
+
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    nickName: First
+    username: wjdtmdgus321@gmail.com
+    password: plbpqwidgygexywc
+    properties:
+      debug: true
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            trust: smtp.gmail.com
+          starttls:
+            enable: true
+
+springboot:
+  jwt:
+    secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
