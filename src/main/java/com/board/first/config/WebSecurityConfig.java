@@ -45,7 +45,7 @@ public class WebSecurityConfig {
                         .accessDeniedHandler(jwtAccessDeniedHandler)) // 권한 없음 처리
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/signup", "/h2-console/**").permitAll() // 인증 없이 접근 허용
+                        .requestMatchers("/First/**", "/login", "/signup", "/h2-console/**").permitAll() // 인증 없이 접근 허용
                         .anyRequest().authenticated())
 
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);

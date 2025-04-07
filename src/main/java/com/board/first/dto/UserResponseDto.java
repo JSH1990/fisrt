@@ -1,4 +1,4 @@
-package com.board.first.service;
+package com.board.first.dto;
 
 import com.board.first.entity.User;
 import lombok.AllArgsConstructor;

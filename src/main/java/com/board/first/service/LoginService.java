@@ -1,14 +1,12 @@
 package com.board.first.service;
 
-import com.board.first.dto.LoginUserDto;
-import com.board.first.dto.UserDto;
 import com.board.first.dto.UserRequestDto;
+import com.board.first.dto.UserResponseDto;
 import com.board.first.entity.User;
 import com.board.first.repository.UserRepository;
 import com.board.first.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
