@@ -1,5 +1,6 @@
 package com.board.first.controller;
 
+import com.board.first.dto.TokenDto;
 import com.board.first.dto.UserRequestDto;
 import com.board.first.dto.UserResponseDto;
 import com.board.first.service.LoginService;
@@ -17,7 +18,13 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody UserRequestDto userRequestDto){
-        return ResponseEntity.ok(loginService.signUp(userRequestDto));
+    public ResponseEntity<UserResponseDto> signup(@RequestBody UserRequestDto userRequestDto){
+        return ResponseEntity.ok(loginService.signup(userRequestDto));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody UserRequestDto userRequestDto){
+        return ResponseEntity.ok(loginService.login(userRequestDto));
+    }
+
 }
