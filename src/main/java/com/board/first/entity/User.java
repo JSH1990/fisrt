@@ -3,7 +3,6 @@ package com.board.first.entity;
 import com.board.first.Authority.Authority;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +19,6 @@ public class User {
     private String email;
     private String password;
     private String authKey;
-    private String address;
     private LocalDateTime createdDate;
 
 
