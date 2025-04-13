@@ -26,7 +26,7 @@ spring:
     port: 465
     nickName: First
     username: wjdtmdgus321@gmail.com
-    password: plbpqwidgygexywc
+    password: gdcadzdssqjrkkri
     properties:
       debug: true
       mail:
