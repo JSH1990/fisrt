@@ -4,11 +4,15 @@ import com.board.first.dto.TokenDto;
 import com.board.first.dto.TokenRequestDto;
 import com.board.first.dto.UserRequestDto;
 import com.board.first.dto.UserResponseDto;
+import com.board.first.entity.User;
 import com.board.first.service.EmailService;
 import com.board.first.service.LoginService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -59,6 +63,17 @@ public class LoginController {
             String code = emailService.sendSimpleMessage(email);
             log.info("인증 코드: " + code);
             return code;
+        }
+    }
+
+    @PutMapping("/main/changePwd")
+    public ResponseEntity<?> changePwd(@RequestBody User user, HttpServletRequest request,
+                                       @AuthenticationPrincipal UserDetails userDetails){
+        try {
+            boolean isUpdate = loginService.changePwd(user, request, userDetails);
+            return ResponseEntity.ok("비밀번호 변경");
+        }catch (IllegalAccessError e){
+            return ResponseEntity.badRequest().body("비밀번호 변경 실패" + e.getMessage());
         }
     }
 }

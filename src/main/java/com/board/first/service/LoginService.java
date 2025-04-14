@@ -9,15 +9,18 @@ import com.board.first.entity.User;
 import com.board.first.repository.RefreshTokenRepository;
 import com.board.first.repository.UserRepository;
 import com.board.first.security.TokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.IllegalFormatCodePointException;
 import java.util.Optional;
 
 @Service
@@ -30,6 +33,7 @@ public class LoginService {
     private final TokenProvider tokenProvider;
     private final EmailService emailService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final LoginService loginService;
 
     // 회원 가입
     @Transactional
@@ -105,5 +109,36 @@ public class LoginService {
     public boolean isValidEmail(String email){
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent();
+    }
+
+    // 토큰 유효하면 User 정보 가져오기
+    public User validateTokenAndGetUser(HttpServletRequest request, UserDetails userDetails){
+        String accessToken = request.getHeader("Authorization");
+        if(accessToken != null && accessToken.startsWith("Bearer ")){
+            accessToken = accessToken.substring(7);
+        }
+
+        // 토큰 유효한지 검증
+        if(accessToken != null && tokenProvider.validateToken(accessToken)){
+            Long Id = Long.valueOf(userDetails.getUsername());
+            User user = userRepository.findById(Id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다."));
+            return user;
+        }else {
+            throw new IllegalStateException("토큰이 만료 되었습니다. Refresh Token을 보내주세요");
+        }
+    }
+
+    // 비밀번호 변경
+    public boolean changePwd(User user, HttpServletRequest request, UserDetails userDetails){
+        User authUser = loginService.validateTokenAndGetUser(request, userDetails);
+        User member = userRepository.findById(authUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
+        String encodePassword = passwordEncoder.encode(user.getPassword());
+        member.setPassword(encodePassword);
+        User saveMember = userRepository.save(member);
+        log.info(saveMember.toString());
+
+        return true;
     }
 }
