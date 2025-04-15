@@ -33,7 +33,6 @@ public class LoginService {
     private final TokenProvider tokenProvider;
     private final EmailService emailService;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final LoginService loginService;
 
     // 회원 가입
     @Transactional
@@ -131,7 +130,7 @@ public class LoginService {
 
     // 비밀번호 변경
     public boolean changePwd(User user, HttpServletRequest request, UserDetails userDetails){
-        User authUser = loginService.validateTokenAndGetUser(request, userDetails);
+        User authUser = validateTokenAndGetUser(request, userDetails);
         User member = userRepository.findById(authUser.getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다."));
         String encodePassword = passwordEncoder.encode(user.getPassword());
