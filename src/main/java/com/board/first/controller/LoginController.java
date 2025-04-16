@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/First")
 @RequiredArgsConstructor
 public class LoginController {
-    private final LoginService loginService;
+    private final LoginService loginService; //test
     private final EmailService emailService;
 
     @PostMapping("/signup")
