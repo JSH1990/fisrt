@@ -18,6 +18,7 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
     // test
     // 에러처리
     //exception handelr
+    // 메서드 팩토리
     @Override
     public void configure(HttpSecurity http) {
         JwtFilter customFilter = new JwtFilter(tokenProvider);
